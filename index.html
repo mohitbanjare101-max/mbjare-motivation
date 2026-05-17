@@ -761,22 +761,61 @@
 
   const catLabels = {safalta:'Safalta', mehnat:'Mehnat', himmat:'Himmat', soch:'Soch', zindagi:'Zindagi'};
 
-  // ── FEATURED QUOTE ──
-  let fqIdx = 0;
+  // ── AUTO RANDOM FEATURED QUOTE ──
 
-  function nextQuote() {
-    fqIdx = (fqIdx + 1) % quotes.length;
-    const el = document.getElementById('fqText');
-    el.style.opacity = '0';
-    setTimeout(() => {
-      el.textContent = quotes[fqIdx].t;
-      document.getElementById('fqAuthor').textContent = '— ' + quotes[fqIdx].a;
-      document.getElementById('fqNum').textContent = (fqIdx + 1) + ' / ' + quotes.length;
-      el.style.opacity = '1';
-    }, 320);
-  }
-  document.getElementById('fqText').style.transition = 'opacity 0.32s';
-  document.getElementById('fqNum').textContent = '1 / ' + quotes.length;
+let shownQuotes=[];
+
+function nextQuote(){
+
+if(shownQuotes.length>=quotes.length){
+shownQuotes=[];
+}
+
+let randomIndex;
+
+do{
+randomIndex=
+Math.floor(Math.random()*quotes.length);
+}
+while(
+shownQuotes.includes(randomIndex)
+);
+
+shownQuotes.push(randomIndex);
+
+const q=quotes[randomIndex];
+
+const el=
+document.getElementById('fqText');
+
+el.style.opacity='0';
+
+setTimeout(()=>{
+
+el.textContent=q.t;
+
+document.getElementById(
+'fqAuthor'
+).textContent='— '+q.a;
+
+document.getElementById(
+'fqNum'
+).textContent=
+shownQuotes.length+' / '+quotes.length;
+
+el.style.opacity='1';
+
+},300);
+
+}
+
+nextQuote();
+
+setInterval(nextQuote,10000);
+
+document.getElementById(
+'fqText'
+).style.transition='opacity .32s';
 
   // ── TICKER ROTATION ──
   const tickerItems = [
